@@ -1,0 +1,57 @@
+// Example using google analytics data with longitute and latitude fields
+//
+import sls from "single-line-string"
+
+const makeVegaSpec = ({
+  width,
+  height,
+  minXBounds,
+  minYBounds,
+  maxYBounds,
+  maxXBounds
+}) => ({
+  width,
+  height,
+  data: [
+    {
+      name: "ga_test2",
+      sql: sls`SELECT 
+        conv_4326_900913_x(ga_longitude) as x,
+        conv_4326_900913_y(ga_latitude) as y,
+        rowid
+        FROM ga_test2 LIMIT 2000000`
+    }
+  ],
+  scales: [
+    {
+      name: "x",
+      type: "linear",
+      domain: [minXBounds, maxXBounds],
+      range: "width"
+    },
+    {
+      name: "y",
+      type: "linear",
+      domain: [minYBounds, maxYBounds],
+      range: "height"
+    }
+  ],
+  marks: [
+    {
+      type: "symbol",
+      from: { data: "ga_test2" },
+      properties: {
+        width: 10,
+        height: 10,
+        x: { scale: "x", field: "x" },
+        y: { scale: "y", field: "y" },
+        fillColor: "blue",
+        strokeColor: "rgb(0, 0, 0)",
+        strokeWidth: 0.5,
+        shape: "circle"
+      }
+    }
+  ]
+});
+
+export default makeVegaSpec

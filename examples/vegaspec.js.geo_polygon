@@ -1,0 +1,68 @@
+// Example using POLYGON dataset
+//
+import sls from "single-line-string"
+
+const makeVegaSpec = ({
+  width,
+  height,
+  minXBounds,
+  minYBounds,
+  maxYBounds,
+  maxXBounds,
+  minLon,
+  maxLon,
+  minLat,
+  maxLat
+}) => ({
+    width,
+    height,
+    "data": [
+    {
+      "name": "polys",
+      "format": "polys",
+      "shapeColGroup": "mapd",
+      "sql": "SELECT vedalots3.rowid FROM vedalots3"
+    }
+    ],
+    "projections": [
+    {
+      "name": "projection",
+      "type": "mercator",
+      "bounds": {
+        "x": [minLon, maxLon],
+        "y": [minLat, maxLat]
+      }
+    }
+    ],
+    "scales": [
+    ],
+    "marks": [
+    {
+      "type": "polys",
+      "from": {
+        "data": "polys"
+      },
+      "properties": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "fillColor": {
+          "value": "red"
+        },
+        "strokeColor": "white",
+        "strokeWidth": 0,
+        "lineJoin": "miter",
+        "miterLimit": 10
+      },
+      "transform": {
+        "projection": "projection"
+      }
+    }
+    ]
+}
+);
+
+export default makeVegaSpec
