@@ -1,16 +1,10 @@
-# MapD Vega MapboxGL Demo
+# MapD Vega MapboxGL Geo
 
-A barebones example of using the Vega spec for MapD backend rendering with MapBoxGL.JS
+MapD Vega MapboxGL Demo - Written by Chris Henrick is a barebones example of using the Vega spec for MapD backend rendering with MapBoxGL.JS.
+This repo has vega spec examples that use the Geo data types like point, polygon and line.
 
-## Install
 
-Using `npm`:
-
-```
-npm install
-```
-
-Using `yarn` (recommended)
+## Install using yarn is preferred
 
 ```
 yarn install
@@ -32,3 +26,4 @@ _...to do..._
 
 ## Author
 Chris Henrick ([@clhenrick](http://github.com/clhenrick))
+Veda Shankar ([@omveda](http://github.com/omveda))
