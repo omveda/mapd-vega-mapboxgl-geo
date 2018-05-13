@@ -4,7 +4,9 @@ MapD Vega MapboxGL Demo - Written by Chris Henrick is a barebones example of usi
 This repo has vega spec examples that use the Geo data types like point, polygon and line.
 
 
-## Install using yarn is preferred
+## Install
+
+Install using yarn is the preferred method.
 
 ```
 yarn install
