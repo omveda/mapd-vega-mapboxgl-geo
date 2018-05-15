@@ -24,13 +24,25 @@ const makeVegaSpec = ({
         conv_4326_900913_x(ST_X(mapd_geo)) as x,
         conv_4326_900913_y(ST_Y(mapd_geo)) as y,
         rowid
-        FROM vedatest1 LIMIT 20000`
+        FROM vedatest1 LIMIT 2000000`
     },
     {
       "name": "polys",
       "format": "polys",
       "shapeColGroup": "mapd",
       "sql": "SELECT vedalots3.rowid FROM vedalots3"
+    },
+    {
+      "name": "sewer_lines",
+      "format": {
+        "type": "lines",
+        "coords": {
+          "x": ["points"],
+          "y": [{"from": "points"}]
+        },
+        "layout": "interleaved"
+      },
+      "sql": "SELECT rowid, orig_geom as points FROM veda_utility_lines where type = 'sewer'"
     },
     {
       "name": "lines",
@@ -42,7 +54,7 @@ const makeVegaSpec = ({
         },
         "layout": "interleaved"
       },
-      "sql": "SELECT rowid, orig_geom as points FROM veda_sql_test3"
+      "sql": "SELECT rowid, orig_geom as points FROM veda_utility_lines where type = 'communication'"
     }
   ],
   "projections": [
@@ -120,7 +132,7 @@ const makeVegaSpec = ({
     },
     {
       "type": "lines",
-      "from": {"data": "lines"},
+      "from": {"data": "sewer_lines"},
       "properties": {
         "x": {
           "field": "x"
@@ -129,7 +141,26 @@ const makeVegaSpec = ({
           "field": "y"
         },
         "strokeColor": "green",
-        "strokeWidth": 5,
+        "strokeWidth": 3,
+        "lineJoin": "miter",
+        "miterLimit": 10
+      },
+      "transform": {
+        "projection": "projection"
+      }
+    },
+    {
+      "type": "lines",
+      "from": {"data": "lines"},
+      "properties": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "strokeColor": "orange",
+        "strokeWidth": 4,
         "lineJoin": "miter",
         "miterLimit": 10
       },
