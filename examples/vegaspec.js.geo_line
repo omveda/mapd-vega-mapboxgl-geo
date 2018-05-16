@@ -18,6 +18,18 @@ const makeVegaSpec = ({
     height,
     "data": [
     {
+      "name": "sewer_lines",
+      "format": {
+        "type": "lines",
+        "coords": {
+          "x": ["points"],
+          "y": [{"from": "points"}]
+        },
+        "layout": "interleaved"
+      },
+      "sql": "SELECT rowid, orig_geom as points FROM veda_utility_lines where type = 'sewer'"
+    },
+    {
       "name": "lines",
       "format": {
         "type": "lines",
@@ -27,7 +39,7 @@ const makeVegaSpec = ({
         },
         "layout": "interleaved"
       },
-      "sql": "SELECT rowid, orig_geom as points FROM veda_sql_test3"
+      "sql": "SELECT rowid, orig_geom as points FROM veda_utility_lines where type = 'communication'"
     }
     ],
     "projections": [
@@ -52,7 +64,7 @@ const makeVegaSpec = ({
     "marks": [
     {
       "type": "lines",
-      "from": {"data": "lines"},
+      "from": {"data": "sewer_lines"},
       "properties": {
         "x": {
           "field": "x"
@@ -61,7 +73,26 @@ const makeVegaSpec = ({
           "field": "y"
         },
         "strokeColor": "green",
-        "strokeWidth": 5,
+        "strokeWidth": 3,
+        "lineJoin": "miter",
+        "miterLimit": 10
+      },
+      "transform": {
+        "projection": "projection"
+      }
+    },
+    {
+      "type": "lines",
+      "from": {"data": "lines"},
+      "properties": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "strokeColor": "orange",
+        "strokeWidth": 4,
         "lineJoin": "miter",
         "miterLimit": 10
       },
