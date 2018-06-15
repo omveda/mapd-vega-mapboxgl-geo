@@ -19,18 +19,18 @@ const makeVegaSpec = ({
   height,
   data: [
     {
-      name: "veda_sf_parking_points",
+      name: "sf_facilities",
       sql: sls`SELECT 
         conv_4326_900913_x(ST_X(mapd_geo)) as x,
         conv_4326_900913_y(ST_Y(mapd_geo)) as y,
         rowid
-        FROM veda_sf_parking_points LIMIT 2000000`
+        FROM sf_facilities LIMIT 2000000`
     },
     {
-      "name": "polys",
+      "name": "sf_citylots",
       "format": "polys",
       "shapeColGroup": "mapd",
-      "sql": "SELECT vedalots3.rowid FROM vedalots3"
+      "sql": "SELECT sf_citylots.rowid FROM sf_citylots"
     },
     {
       "name": "sewer_lines",
@@ -42,10 +42,10 @@ const makeVegaSpec = ({
         },
         "layout": "interleaved"
       },
-      "sql": "SELECT rowid, orig_geom as points FROM veda_utility_lines where type = 'sewer'"
+      "sql": "SELECT rowid, orig_geom as points FROM utility_lines where type = 'sewer'"
     },
     {
-      "name": "lines",
+      "name": "comm_lines",
       "format": {
         "type": "lines",
         "coords": {
@@ -54,7 +54,7 @@ const makeVegaSpec = ({
         },
         "layout": "interleaved"
       },
-      "sql": "SELECT rowid, orig_geom as points FROM veda_utility_lines where type = 'communication'"
+      "sql": "SELECT rowid, orig_geom as points FROM utility_lines where type = 'communication'"
     }
   ],
   "projections": [
@@ -90,7 +90,7 @@ const makeVegaSpec = ({
   marks: [
     {
       type: "symbol",
-      from: { data: "veda_sf_parking_points" },
+      from: { data: "sf_facilities" },
       properties: {
         width: 5,
         height: 5,
@@ -107,7 +107,7 @@ const makeVegaSpec = ({
     {
       "type": "polys",
       "from": {
-        "data": "polys"
+        "data": "sf_citylots"
       },
       "properties": {
         "x": {
@@ -141,7 +141,7 @@ const makeVegaSpec = ({
           "field": "y"
         },
         "strokeColor": "green",
-        "strokeWidth": 3,
+        "strokeWidth": 4,
         "lineJoin": "miter",
         "miterLimit": 10
       },
@@ -151,7 +151,7 @@ const makeVegaSpec = ({
     },
     {
       "type": "lines",
-      "from": {"data": "lines"},
+      "from": {"data": "comm_lines"},
       "properties": {
         "x": {
           "field": "x"
@@ -160,7 +160,7 @@ const makeVegaSpec = ({
           "field": "y"
         },
         "strokeColor": "orange",
-        "strokeWidth": 4,
+        "strokeWidth": 3,
         "lineJoin": "miter",
         "miterLimit": 10
       },
