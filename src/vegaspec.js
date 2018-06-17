@@ -19,14 +19,6 @@ const makeVegaSpec = ({
   height,
   data: [
     {
-      name: "sf_facilities",
-      sql: sls`SELECT 
-        conv_4326_900913_x(ST_X(mapd_geo)) as x,
-        conv_4326_900913_y(ST_Y(mapd_geo)) as y,
-        rowid
-        FROM sf_facilities LIMIT 2000000`
-    },
-    {
       "name": "sf_citylots",
       "format": "polys",
       "shapeColGroup": "mapd",
@@ -55,7 +47,11 @@ const makeVegaSpec = ({
         "layout": "interleaved"
       },
       "sql": "SELECT rowid, orig_geom as points FROM utility_lines where type = 'communication'"
-    }
+    },
+    {
+      name: "sf_facilities",
+sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(ST_Y(A.mapd_geo)) as y, A.rowid from sf_facilities A, utility_lines B WHERE ST_Distance(ST_Transform(A.mapd_geo,900913), ST_Transform(B.orig_geom,900913)) < 20`
+    },
   ],
   "projections": [
     {
