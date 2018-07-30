@@ -11,6 +11,7 @@ function establishConnection(config) {
       .dbName(config.database)
       .user(config.username)
       .password(config.password)
+      .protocol(config.protocol)
       .connect((error, con) => {
         if (error) {
           reject(error)
