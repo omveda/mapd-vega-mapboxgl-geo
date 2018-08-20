@@ -24,6 +24,7 @@ then open your browser to `http://localhost:8080`
 
 ## Required Tables
 You should load the tables from the these geodata files for the queries to work.
+
 https://s3.amazonaws.com/mapd-data/geodata/citylots.json - save as sf_citylots
 
 https://s3.amazonaws.com/mapd-data/geodata/sffacs_current.zip - save as sf_facility
