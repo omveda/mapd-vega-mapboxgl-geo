@@ -22,9 +22,15 @@ npm start
 
 then open your browser to `http://localhost:8080`
 
-## Deploy
+## Required Tables
+You should load the tables from the these geodata files for the queries to work.
 
-_...to do..._
+https://s3.amazonaws.com/mapd-data/geodata/citylots.json - save as sf_citylots
+
+https://s3.amazonaws.com/mapd-data/geodata/sffacs_current.zip - save as sf_facility
+
+https://s3.amazonaws.com/mapd-data/geodata/SFMTA-Bikeway-Network.zip - save as sf_bikeway
+
 
 ## Author
 Chris Henrick ([@clhenrick](http://github.com/clhenrick))
