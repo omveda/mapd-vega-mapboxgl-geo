@@ -19,13 +19,15 @@ const makeVegaSpec = ({
   height,
   data: [
     {
+      // Render the SF lots (POLYGON) which have a bike lane running through them.
       "name": "sf_citylots",
       "format": "polys",
       "shapeColGroup": "mapd",
-      "sql": "SELECT sf_citylots.rowid FROM sf_citylots"
+      "sql": "SELECT A.rowid from sf_citylots A, sf_facility B where ST_Contains(A.mapd_geo, B.mapd_geo)"
     },
     {
-      "name": "sewer_lines",
+      // Render all the bike lanes in SF (LINESTRING).
+      "name": "bikeways",
       "format": {
         "type": "lines",
         "coords": {
@@ -34,23 +36,12 @@ const makeVegaSpec = ({
         },
         "layout": "interleaved"
       },
-      "sql": "SELECT rowid, orig_geom as points FROM utility_lines where type = 'sewer'"
+      "sql": "SELECT rowid, mapd_geo as points FROM sf_bikeway"
     },
     {
-      "name": "comm_lines",
-      "format": {
-        "type": "lines",
-        "coords": {
-          "x": ["points"],
-          "y": [{"from": "points"}]
-        },
-        "layout": "interleaved"
-      },
-      "sql": "SELECT rowid, orig_geom as points FROM utility_lines where type = 'communication'"
-    },
-    {
-      name: "sf_facilities",
-sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(ST_Y(A.mapd_geo)) as y, A.rowid from sf_facilities A, utility_lines B WHERE ST_Distance(ST_Transform(A.mapd_geo,900913), ST_Transform(B.orig_geom,900913)) < 20`
+      // Render all the SF facilities (POINT) that are within 50 meters from the bike lanes.
+      "name": "sf_facilities",
+      "sql": "select conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(ST_Y(A.mapd_geo)) as y, A.rowid from sf_facility A, sf_bikeway B where ST_Distance(ST_Transform(B.mapd_geo, 900913), ST_Transform(A.mapd_geo, 900913)) < 50"
     },
   ],
   "projections": [
@@ -93,11 +84,11 @@ sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(
         x: { scale: "x", field: "x" },
         y: { scale: "y", field: "y" },
         fillColor: "blue",
-        fillOpacity: 0.9,
-        opacity: 0.9,
+        fillOpacity: 1.0,
+        opacity: 1.0,
         strokeColor: "rgb(0, 0, 0)",
-        strokeWidth: 0.5,
-        shape: "circle"
+        strokeWidth: 2.5,
+        shape: "square"
       }
     },
     {
@@ -115,9 +106,9 @@ sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(
         "fillColor": {
           "value": "red"
         },
-        fillOpacity: .5,
-        opacity: .5,
-        "strokeColor": "white",
+        "fillOpacity": .9,
+        "opacity": .7,
+        "strokeColor": "blue",
         "strokeWidth": 0,
         "lineJoin": "miter",
         "miterLimit": 10
@@ -128,7 +119,7 @@ sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(
     },
     {
       "type": "lines",
-      "from": {"data": "sewer_lines"},
+      "from": {"data": "bikeways"},
       "properties": {
         "x": {
           "field": "x"
@@ -137,7 +128,7 @@ sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(
           "field": "y"
         },
         "strokeColor": "green",
-        "strokeWidth": 4,
+        "strokeWidth": 2,
         "lineJoin": "miter",
         "miterLimit": 10
       },
@@ -145,25 +136,6 @@ sql: sls `select  conv_4326_900913_x(ST_X(A.mapd_geo)) as x, conv_4326_900913_y(
         "projection": "projection"
       }
     },
-    {
-      "type": "lines",
-      "from": {"data": "comm_lines"},
-      "properties": {
-        "x": {
-          "field": "x"
-        },
-        "y": {
-          "field": "y"
-        },
-        "strokeColor": "orange",
-        "strokeWidth": 3,
-        "lineJoin": "miter",
-        "miterLimit": 10
-      },
-      "transform": {
-        "projection": "projection"
-      }
-    }
   ]
 }
 
