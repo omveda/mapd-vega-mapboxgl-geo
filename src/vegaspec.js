@@ -19,7 +19,7 @@ const makeVegaSpec = ({
   height,
   data: [
     {
-      // Render the SF lots (POLYGON) which have a bike lane running through them.
+      // Render the SF lots (POLYGON) which have a city facility located on them.
       "name": "sf_citylots",
       "format": "polys",
       "shapeColGroup": "mapd",
@@ -109,7 +109,7 @@ const makeVegaSpec = ({
         "fillOpacity": .9,
         "opacity": .7,
         "strokeColor": "blue",
-        "strokeWidth": 0,
+        "strokeWidth": 2,
         "lineJoin": "miter",
         "miterLimit": 10
       },
