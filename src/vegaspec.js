@@ -23,7 +23,7 @@ const makeVegaSpec = ({
       "name": "sf_citylots",
       "format": "polys",
       "shapeColGroup": "mapd",
-      "sql": "SELECT A.rowid from sf_citylots A, sf_facility B where ST_Contains(A.mapd_geo, B.mapd_geo)"
+      "sql": "SELECT A.rowid from sf_facility B, sf_citylots A where ST_Contains(A.mapd_geo, B.mapd_geo)"
     },
     {
       // Render all the bike lanes in SF (LINESTRING).
